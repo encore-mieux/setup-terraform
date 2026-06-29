@@ -28,9 +28,8 @@ runs:
       shell: bash
       run: |
         dpkg --compare-versions ${{ inputs.terraform-version }} eq $(terraform --version | head -n1 | cut -d'v' -f2) && exit 0
-        curl -qs https://releases.hashicorp.com/terraform/"${{ inputs.terraform-version }}"/terraform_"${{ inputs.terraform-version }}"_linux_amd64.zip | \
-          gunzip - | \
-          sudo tee /usr/local/bin/terraform > /dev/null
+        curl -qs https://releases.hashicorp.com/terraform/"${{ inputs.terraform-version }}"/terraform_"${{ inputs.terraform-version }}"_linux_amd64.zip -o /tmp/terraform.zip
+        sudo unzip -o -j /tmp/terraform.zip terraform -d /usr/local/bin
         sudo chmod +x /usr/local/bin/terraform
         terraform --version
     - name: terraform init
